@@ -36,7 +36,7 @@ router.get('/api/posts/:id', (req,res)=>{
     Posts.findById(req.params.id)
     .then(data => {
             // throw("ERRRROOOOOORRR");
-            if(data.id !== req.params.id){
+            if(data[0].id != req.params.id){
                 res.status(404).json({ message: "The post with the specified ID does not exist." })
             }else{
                 res.status(200).json(data);
