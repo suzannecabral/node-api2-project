@@ -15,15 +15,17 @@ const Posts = require('../data/db');
 router.get('/api/posts', (req,res) => {
     Posts.find(req.body)
         .then(data => {
+            // throw ("error thing");
             if(data){
-                res.status(200).json(data)
+                res.status(200).json(data);
             }else{
-                res.status(404).json({message:"Posts not found"})
+                res.status(404).json({message:"Posts not found"});
             }  
+            
         })
         .catch(err => {
             console.log(err);
-            res.status(500).json(err);
+            res.status(500).json({ error: "The posts information could not be retrieved." });
         })
 });
 
