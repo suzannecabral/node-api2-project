@@ -1,4 +1,5 @@
 const express = require('express');
+const { insertComment } = require('../data/db');
 const router = express.Router();
 const Posts = require('../data/db');
 //capital - from model
@@ -94,7 +95,7 @@ router.delete('/api/posts/:id', (req,res)=>{
         })
 });
 
-// [ ]
+// [x]
 // POST new post ====================================
 
 router.post('/api/posts', (req,res)=>{
@@ -116,6 +117,31 @@ router.post('/api/posts', (req,res)=>{
                 res.status(500).json({ error: "There was an error while saving the post to the database" });
             })
     }
+});
+
+// [ ]
+// POST new comment by post id =========================
+
+router.post('/api/posts/:id/comments', (req,res)=>{
+
+    if( !req.body.text ){
+        res.status(400).json({ errorMessage: "Please provide text for the comment." })
+    }else{
+        const newComment={
+            "text":req.body.text,
+            "post_id":req.params.id
+        }
+        insertComment(newComment)
+            .then(data=>{
+                console.log(data);
+                res.status(201).json({ message: "Comment added successfully"})
+            })
+            .catch(err=>{
+                console.log(err);
+                res.status(500).json({ error: "There was an error while saving the comment to the database" });
+            });
+    }
+
 });
 
 
