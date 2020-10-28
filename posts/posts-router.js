@@ -78,6 +78,9 @@ router.get('/api/posts/:id/comments', (req,res)=>{
 //FIX: this is deleting and also returning the 404 message
 //does not seem to return the 200 status
 
+//next step: checkout lec example
+//next next step: Q&A wed morning
+
 router.delete('/api/posts/:id', (req,res)=>{
     Posts.remove(req.params.id)
         .then(data=>{
@@ -92,6 +95,11 @@ router.delete('/api/posts/:id', (req,res)=>{
             res.status(500).json({ error: "The post could not be removed" });
         })
 });
+
+
+// POST new post ====================================
+
+router.post('api');
 
 
 
