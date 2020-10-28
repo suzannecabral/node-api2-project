@@ -76,6 +76,12 @@ router.get('/api/posts/:id/comments', (req,res)=>{
 
 // [x]
 // DELETE post by id ====================================
+//to return a whole deleted post:
+//nest the remove function inside the .then for a findPostById
+// finds post, saves it to a variable, 
+// then deletes post
+// on success, uses stored variable to print the now-deleted post content.
+// I don't think this is what was intended.
 
 router.delete('/api/posts/:id', (req,res)=>{
     Posts.remove(req.params.id)
@@ -110,7 +116,7 @@ router.post('/api/posts', (req,res)=>{
             .then(data=>{
                 // console.log(data);
                 // //data is an object { id:24 }
-                res.status(201).json({message:"Created successfully", data:data});
+                res.status(201).json({message:`Post ${data.id} was created successfully`});
             })
             .catch(err=>{
                 console.log(err);
@@ -119,9 +125,10 @@ router.post('/api/posts', (req,res)=>{
     }
 });
 
-// [ ]
+// [x]
 // POST new comment by post id =========================
-
+//to return the whole comment/post/etc: nest a findCommentById in the .then
+// I don't think this is what was intended.
 router.post('/api/posts/:id/comments', (req,res)=>{
 
     if( !req.body.text ){
@@ -134,7 +141,7 @@ router.post('/api/posts/:id/comments', (req,res)=>{
         insertComment(newComment)
             .then(data=>{
                 console.log(data);
-                res.status(201).json({ message: "Comment added successfully"})
+                res.status(201).json({ message: `Comment ${data.id} added successfully`})
             })
             .catch(err=>{
                 console.log(err);
