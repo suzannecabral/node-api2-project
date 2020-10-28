@@ -12,7 +12,7 @@ const Posts = require('../data/db');
 //     res.json({message:'string'});
 // })
 
-
+// [x]
 // GET all posts =====================================
 
 router.get('/api/posts', (req,res) => {
@@ -31,6 +31,7 @@ router.get('/api/posts', (req,res) => {
         })
 });
 
+// [x]
 // GET post by id ====================================
 
 router.get('/api/posts/:id', (req,res)=>{   
@@ -49,7 +50,7 @@ router.get('/api/posts/:id', (req,res)=>{
     })
 });
 
-
+// [x]
 // GET comments by post id ====================================
 
 router.get('/api/posts/:id/comments', (req,res)=>{
@@ -72,7 +73,7 @@ router.get('/api/posts/:id/comments', (req,res)=>{
         })
 });
 
-
+// [ ]
 // DELETE post by id ====================================
 
 //FIX: this is deleting and also returning the 404 message
@@ -99,7 +100,7 @@ router.delete('/api/posts/:id', (req,res)=>{
         })
 });
 
-
+// [ ]
 // POST new post ====================================
 
 //Fix this: 
