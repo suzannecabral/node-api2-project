@@ -81,6 +81,9 @@ router.get('/api/posts/:id/comments', (req,res)=>{
 //next step: checkout lec example
 //next next step: Q&A wed morning
 
+//non-destructive error tree first?
+//can I do Posts.find inside a router.delete function?
+
 router.delete('/api/posts/:id', (req,res)=>{
     Posts.remove(req.params.id)
         .then(data=>{
@@ -99,8 +102,28 @@ router.delete('/api/posts/:id', (req,res)=>{
 
 // POST new post ====================================
 
-router.post('api');
+//Fix this: 
 
+// .returning() is not supported by sqlite3 and will not have any effect.
+// [Error:  - SQLITE_MISUSE: not an error] {
+//   errno: 21,
+//   code: 'SQLITE_MISUSE'
+
+
+router.post('/api/posts', (req,res)=>{
+    Posts.insert()
+        .then(data=>{
+            if(!req.body.contents || !req.body.title){
+                req.status(400).json({ errorMessage: "Please provide title and contents for the post." });
+            }else{
+                req.status(201).json(data)
+            }
+        })
+        .catch(err=>{
+            console.log(err);
+            res.status(500).json({ error: "There was an error while saving the post to the database" });
+        })
+});
 
 
 //----------------------------------
