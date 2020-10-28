@@ -12,7 +12,7 @@ const Posts = require('../data/db');
 //     res.json({message:'string'});
 // })
 
-
+// [x]
 // GET all posts =====================================
 
 router.get('/api/posts', (req,res) => {
@@ -31,6 +31,7 @@ router.get('/api/posts', (req,res) => {
         })
 });
 
+// [x]
 // GET post by id ====================================
 
 router.get('/api/posts/:id', (req,res)=>{   
@@ -49,7 +50,7 @@ router.get('/api/posts/:id', (req,res)=>{
     })
 });
 
-
+// [x]
 // GET comments by post id ====================================
 
 router.get('/api/posts/:id/comments', (req,res)=>{
@@ -72,23 +73,17 @@ router.get('/api/posts/:id/comments', (req,res)=>{
         })
 });
 
-
+// [x]
 // DELETE post by id ====================================
-
-//FIX: this is deleting and also returning the 404 message
-//does not seem to return the 200 status
-
-//next step: checkout lec example
-//next next step: Q&A wed morning
-
-//non-destructive error tree first?
-//can I do Posts.find inside a router.delete function?
 
 router.delete('/api/posts/:id', (req,res)=>{
     Posts.remove(req.params.id)
         .then(data=>{
-            if(data.id === Number(req.params.id)){
-                res.status(200).json(data);
+            //console log the data in .then first
+            //before writing logic
+            console.log(data);
+            if(/*data.id === Number(req.params.id*/ data > 0){
+                res.status(200).json({ message: "The post has been deleted"});
             }else{
                 res.status(404).json({ message: "The post with the specified ID does not exist." });
             }
@@ -99,30 +94,28 @@ router.delete('/api/posts/:id', (req,res)=>{
         })
 });
 
-
+// [ ]
 // POST new post ====================================
 
-//Fix this: 
-
-// .returning() is not supported by sqlite3 and will not have any effect.
-// [Error:  - SQLITE_MISUSE: not an error] {
-//   errno: 21,
-//   code: 'SQLITE_MISUSE'
-
-
 router.post('/api/posts', (req,res)=>{
-    Posts.insert()
-        .then(data=>{
-            if(!req.body.contents || !req.body.title){
-                req.status(400).json({ errorMessage: "Please provide title and contents for the post." });
-            }else{
-                req.status(201).json(data)
-            }
-        })
-        .catch(err=>{
-            console.log(err);
-            res.status(500).json({ error: "There was an error while saving the post to the database" });
-        })
+    // if statement needs to be outside promise
+    //decide whether or not to run posts.insert
+    // based on validation if () 
+
+    if( !req.body.contents || !req.body.title ){
+        res.status(400).json({ errorMessage: "Please provide title and contents for the post." });
+    }else{
+        Posts.insert(req.body)
+            .then(data=>{
+                // console.log(data);
+                // //data is an object { id:24 }
+                res.status(201).json({message:"Created successfully", data:data});
+            })
+            .catch(err=>{
+                console.log(err);
+                res.status(500).json({ error: "There was an error while saving the post to the database" });
+            })
+    }
 });
 
 

@@ -8,8 +8,8 @@ const postsRouter = require('./posts/posts-router');
 const server=express();
 
 //configure
-server.use(express.json());
-server.use(postsRouter);
+server.use(express.json());//this uses the express .json() method
+server.use(postsRouter);//this uses the express router we built in posts-router.js
 
 
 //test endpoint
