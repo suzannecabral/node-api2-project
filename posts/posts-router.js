@@ -73,17 +73,8 @@ router.get('/api/posts/:id/comments', (req,res)=>{
         })
 });
 
-// [ ]
+// [x]
 // DELETE post by id ====================================
-
-//FIX: this is deleting and also returning the 404 message
-//does not seem to return the 200 status
-
-//next step: checkout lec example
-//next next step: Q&A wed morning
-
-//non-destructive error tree first?
-//can I do Posts.find inside a router.delete function?
 
 router.delete('/api/posts/:id', (req,res)=>{
     Posts.remove(req.params.id)
@@ -106,48 +97,25 @@ router.delete('/api/posts/:id', (req,res)=>{
 // [ ]
 // POST new post ====================================
 
-// >> not returning 400 correctly, skips to 500
-
-// does return the newly created id, but not full post
-// does create new post in db
-// does return error info from sqlite on 500 fail
-
 router.post('/api/posts', (req,res)=>{
     // if statement needs to be outside promise
     //decide whether or not to run posts.insert
     // based on validation if () 
-    
-    Posts.insert(req.body)
-        .then(data=>{
-            console.log(data);
-            //data is an object { id:24 }
 
-            if( !req.body.contents || !req.body.title){
-                res.status(400).json({ errorMessage: "Please provide title and contents for the post." });
-            }else{
+    if( !req.body.contents || !req.body.title ){
+        res.status(400).json({ errorMessage: "Please provide title and contents for the post." });
+    }else{
+        Posts.insert(req.body)
+            .then(data=>{
+                // console.log(data);
+                // //data is an object { id:24 }
                 res.status(201).json({message:"Created successfully", data:data});
-            }
-
-            // if(!("contents" in req.body) || !("title" in req.body)){
-            //     res.status(400).json({ errorMessage: "Please provide title and contents for the post." });
-            // }else{
-            //     res.status(201).json({message:"Created successfully", data:data});
-            // }
-        })
-
-        // try1----------------------------------
-        // .then(data=>{
-        //     if(!req.body.contents || !req.body.title){
-        //         req.status(400).json({ errorMessage: "Please provide title and contents for the post." });
-        //     }else{
-        //         req.status(201).json(data)
-        //     }
-        // })
-
-        .catch(err=>{
-            console.log(err);
-            res.status(500).json({ error: "There was an error while saving the post to the database" });
-        })
+            })
+            .catch(err=>{
+                console.log(err);
+                res.status(500).json({ error: "There was an error while saving the post to the database" });
+            })
+    }
 });
 
 
