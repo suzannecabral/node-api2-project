@@ -2,7 +2,7 @@
 const express = require('express');
 const generate = require('shortid').generate;
 // const Posts = require('./data/db'); 
-const postsRouter = require('./posts/posts-router-old');
+const postsRouter = require('./posts/posts-router');
 
 //instantiate - startup new server
 const server=express();
