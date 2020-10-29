@@ -1,5 +1,5 @@
 const express = require('express');
-const { insertComment } = require('../data/db');
+const { insertComment, update } = require('../data/db');
 const router = express.Router();
 const Posts = require('../data/db');
 //capital - from model
@@ -151,6 +151,72 @@ router.post('/api/posts/:id/comments', (req,res)=>{
 
 });
 
+// [x]
+// PUT req to /api/posts/:id =========================
+
+router.put('/api/posts/:id', (req,res)=>{
+    const { id } = req.params
+    const { title, contents } = req.body
+
+    // console.log(updatedPost);
+
+    //0. verify user data
+    if(!title || !contents){
+        //bad request
+        res.status(400).json({ errorMessage: "Please provide title and contents for the post." });
+    }else{
+    //1. find post, verify it exists
+    Posts.findById(id)
+        .then(data=>{
+
+
+            console.log('Post Data:',data)
+
+            if( data.length > 0 ){ 
+                //2. post updated version
+                const updatedPost = {
+                    id,
+                    title,
+                    contents
+                }
+                update(id,updatedPost)
+                    .then(data =>{
+                        console.log(data);
+                        res.status(200).json({message:`Post was updated successfully`});
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.status(500).json({ error: "The post information could not be modified." });
+                    })
+
+            }else{ 
+
+                res.status(404).json({ message: "The post with the specified ID does not exist." });
+
+            }
+
+        })
+        .catch(err=>{
+            //3. doesn't exist
+            console.log(err);
+            res.status(500).json({ error: "The post information could not be modified." });
+        })
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+});
 
 //----------------------------------
 module.exports = router;
